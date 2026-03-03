@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from '../dto/create-product.dto';
@@ -12,7 +16,15 @@ export class ProductsService {
     private productsRepository: Repository<Product>,
   ) {}
 
-  create(createProductDto: CreateProductDto): Promise<Product> {
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    const exists: Product | null = await this.productsRepository.findOneBy({
+      sku: createProductDto.sku,
+    });
+    if (exists)
+      throw new ConflictException(
+        `Product with sku ${createProductDto.sku} already exists`,
+      );
+
     const product = this.productsRepository.create(createProductDto);
     return this.productsRepository.save(product);
   }
