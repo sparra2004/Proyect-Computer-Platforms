@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryColumn } from "typeorm"
 import { Order } from '../../orders/entities/order.entity';
 
 @Entity('products')
