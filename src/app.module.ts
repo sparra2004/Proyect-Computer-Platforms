@@ -9,6 +9,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig } from './config/app.config';
 import { getDatabaseConfig } from './config/database.config';
+import { ViajesModule } from './viajes/viajes.module';
+import { VehiculosModule } from './vehiculos/vehiculos.module';
+import { ConductoresModule } from './conductores/conductores.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { getDatabaseConfig } from './config/database.config';
     UsersModule,
     ProductsModule,
     OrdersModule,
+    ViajesModule,
+    VehiculosModule,
+    ConductoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],
