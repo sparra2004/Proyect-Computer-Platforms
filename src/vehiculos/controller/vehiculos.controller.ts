@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { VehiculosService } from './vehiculos.service';
-import { CreateVehiculoDto } from './dto/create-vehiculo.dto';
-import { UpdateVehiculoDto } from './dto/update-vehiculo.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+
+import { CreateVehiculoDto } from '../dto/create-vehiculo.dto';
+import { UpdateVehiculoDto } from '../dto/update-vehiculo.dto';
+import { VehiculosService } from '../service/vehiculos.service';
 
 @Controller('vehiculos')
 export class VehiculosController {

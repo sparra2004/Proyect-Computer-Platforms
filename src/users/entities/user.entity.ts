@@ -1,20 +1,26 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { Order } from '../../orders/entities/order.entity';
+import { Viaje } from "src/viajes/entities/viaje.entity";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 
-@Entity('users')
+
+@Entity()
 export class User {
-  @PrimaryColumn()
-  id!: number;
+
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
-  name!: string;
+  name: string;
 
   @Column({ unique: true })
-  email!: string;
+  email: string;
 
   @Column()
-  age!: number;
+  age: number;
 
-  @OneToMany(() => Order, (order) => order.user)
-  orders!: Order[];
+  @Column({ unique: true })
+  telefono: string;
+
+  @OneToMany(() => Viaje, (viaje) => viaje.user)
+  viajes: Viaje[];
+
 }

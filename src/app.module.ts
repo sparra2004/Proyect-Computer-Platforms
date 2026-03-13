@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
-import { OrdersModule } from './orders/orders.module';
+
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -26,7 +26,6 @@ import { ConductoresModule } from './conductores/conductores.module';
     }),
     UsersModule,
     ProductsModule,
-    OrdersModule,
     ViajesModule,
     VehiculosModule,
     ConductoresModule,

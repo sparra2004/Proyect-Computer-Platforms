@@ -1,5 +1,4 @@
 import { Column, Entity, ManyToMany, PrimaryColumn } from "typeorm"
-import { Order } from '../../orders/entities/order.entity';
 
 @Entity('products')
 export class Product {
@@ -14,7 +13,4 @@ export class Product {
 
   @Column('decimal', { precision: 10, scale: 2 })
   price!: number;
-
-  @ManyToMany(() => Order, (order) => order.products)
-  orders!: Order[];
 }

@@ -1,6 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { CreateConductorDto } from '../dto/create-conductore.dto';
 import { ConductoresService } from '../service/conductores.service';
-import { CreateConductoreDto } from '../dto/create-conductore.dto';
 import { UpdateConductoreDto } from '../dto/update-conductore.dto';
 
 
@@ -9,8 +17,8 @@ export class ConductoresController {
   constructor(private readonly conductoresService: ConductoresService) {}
 
   @Post()
-  create(@Body() createConductoreDto: CreateConductoreDto) {
-    return this.conductoresService.create(createConductoreDto);
+  create(@Body() createConductorDto: CreateConductorDto) {
+    return this.conductoresService.create(createConductorDto);
   }
 
   @Get()
@@ -24,8 +32,8 @@ export class ConductoresController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateConductoreDto: UpdateConductoreDto) {
-    return this.conductoresService.update(+id, updateConductoreDto);
+  update(@Param('id') id: string, @Body() updateConductorDto: UpdateConductoreDto) {
+    return this.conductoresService.update(+id, updateConductorDto);
   }
 
   @Delete(':id')

@@ -1,28 +1,55 @@
-import { Injectable } from '@nestjs/common';
-import { CreateConductoreDto } from '../dto/create-conductore.dto';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Conductor } from '../entities/conductore.entity';
+import { CreateConductorDto } from '../dto/create-conductore.dto';
 import { UpdateConductoreDto } from '../dto/update-conductore.dto';
-
 
 
 @Injectable()
 export class ConductoresService {
-  create(createConductoreDto: CreateConductoreDto) {
-    return 'This action adds a new conductore';
+  constructor(
+    @InjectRepository(Conductor)
+    private readonly conductoresRepository: Repository<Conductor>,
+  ) {}
+
+  async create(createConductorDto: CreateConductorDto) {
+    const telefonoExists = await this.conductoresRepository.findOneBy({
+      telefono: createConductorDto.telefono,
+    });
+
+    if (telefonoExists)
+      throw new ConflictException(
+        `Telefono ${createConductorDto.telefono} already in use`,
+      );
+
+    const conductor = this.conductoresRepository.create(createConductorDto);
+    return this.conductoresRepository.save(conductor);
   }
 
   findAll() {
-    return `This action returns all conductores`;
+    return this.conductoresRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} conductore`;
+  async findOne(id: number) {
+    const conductor = await this.conductoresRepository.findOneBy({ id });
+    if (!conductor)
+      throw new NotFoundException(`Conductor #${id} not found`);
+    return conductor;
   }
 
-  update(id: number, updateConductoreDto: UpdateConductoreDto) {
-    return `This action updates a #${id} conductore`;
+  async update(id: number, updateConductorDto: UpdateConductoreDto) {
+    const conductor = await this.findOne(id);
+    Object.assign(conductor, updateConductorDto);
+    return this.conductoresRepository.save(conductor);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} conductore`;
+  async remove(id: number) {
+    const conductor = await this.findOne(id);
+    return this.conductoresRepository.remove(conductor);
   }
 }

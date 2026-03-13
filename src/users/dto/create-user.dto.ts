@@ -1,9 +1,7 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateUserDto {
-  @IsNumber()
-  @IsNotEmpty()
-  id!: number;
 
   @IsString()
   @IsNotEmpty()
@@ -16,4 +14,10 @@ export class CreateUserDto {
   @IsNumber()
   @IsNotEmpty()
   age!: number;
+
+  @Type(() => Number)
+  @IsNumber()
+  @IsNotEmpty()
+  id!: number;
+
 }
