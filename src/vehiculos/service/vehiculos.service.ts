@@ -34,21 +34,21 @@ export class VehiculosService {
     return this.vehiculosRepository.find();
   }
 
-  async findOne(id: number) {
-    const vehiculo = await this.vehiculosRepository.findOneBy({ id });
+  async findOne(placa: string) {
+    const vehiculo = await this.vehiculosRepository.findOneBy({ placa });
     if (!vehiculo)
-      throw new NotFoundException(`Vehiculo #${id} not found`);
+      throw new NotFoundException(`Vehiculo #${placa} not found`);
     return vehiculo;
   }
 
-  async update(id: number, updateVehiculoDto: UpdateVehiculoDto) {
-    const vehiculo = await this.findOne(id);
+  async update(placa: string, updateVehiculoDto: UpdateVehiculoDto) {
+    const vehiculo = await this.findOne(placa);
     Object.assign(vehiculo, updateVehiculoDto);
     return this.vehiculosRepository.save(vehiculo);
   }
 
-  async remove(id: number) {
-    const vehiculo = await this.findOne(id);
+  async remove(placa: string) {
+    const vehiculo = await this.findOne(placa);
     return this.vehiculosRepository.remove(vehiculo);
   }
 }

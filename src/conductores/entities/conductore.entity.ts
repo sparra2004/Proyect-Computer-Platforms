@@ -1,23 +1,23 @@
 import { Viaje } from "src/viajes/entities/viaje.entity";
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
 
 
 @Entity()
 export class Conductor {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ unique: true })
-  telefono: string;
+  telefono!: string;
 
   @Column()
-  licencia: boolean;
+  licencia!: boolean;
 
   @OneToMany(() => Viaje, (viaje) => viaje.conductor)
-  viajes: Viaje[];
+  viajes!: Viaje[];
 
 }

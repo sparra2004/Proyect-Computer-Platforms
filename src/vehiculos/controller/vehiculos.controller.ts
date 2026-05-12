@@ -27,17 +27,17 @@ export class VehiculosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.vehiculosService.findOne(+id);
+  findOne(@Param('placa') placa: string) {
+    return this.vehiculosService.findOne(placa);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVehiculoDto: UpdateVehiculoDto) {
-    return this.vehiculosService.update(+id, updateVehiculoDto);
+  @Patch(':placa')
+  update(@Param('placa') placa: string, @Body() updateVehiculoDto: UpdateVehiculoDto) {
+    return this.vehiculosService.update(placa, updateVehiculoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.vehiculosService.remove(+id);
+  remove(@Param('placa') placa: string) {
+    return this.vehiculosService.remove(placa);
   }
 }

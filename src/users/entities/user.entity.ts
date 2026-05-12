@@ -1,11 +1,11 @@
 import { Viaje } from "src/viajes/entities/viaje.entity";
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
 
 
 @Entity()
 export class User {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()

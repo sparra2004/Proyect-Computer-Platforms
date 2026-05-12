@@ -1,11 +1,15 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, isNotEmpty, IsNotEmpty, IsNumber, IsString, IsEmail } from 'class-validator';
 
 export class CreateConductorDto {
+
+  @IsNumber()
+  @IsNotEmpty()
+  id!: number;
 
   @IsString()
   @IsNotEmpty()
   name!: string;
-
+  
   @IsString()
   @IsNotEmpty()
   telefono!: string;
@@ -13,5 +17,7 @@ export class CreateConductorDto {
   @IsBoolean()
   @IsNotEmpty()
   licencia!: boolean;
+
+  
 
 }

@@ -14,6 +14,10 @@ export class CreateUserDto {
   @IsNumber()
   @IsNotEmpty()
   age!: number;
+  
+  @IsString()
+  @IsNotEmpty()
+  telefono!: string;
 
   @Type(() => Number)
   @IsNumber()
