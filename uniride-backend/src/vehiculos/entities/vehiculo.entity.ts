@@ -1,5 +1,5 @@
-import { Conductor } from "src/conductores/entities/conductore.entity";
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Conductor } from "../../conductores/entities/conductore.entity";
 
 
 @Entity()

@@ -14,6 +14,7 @@ export const updateUser = (id: number, data: any) => api.patch(`/users/${id}`, d
 
 // Conductores
 export const getConductores = () => api.get('/conductores');
+export const getConductorById = (id: number) => api.get(`/conductores/${id}`);
 export const createConductor = (data: any) => api.post('/conductores', data);
 
 // Vehiculos

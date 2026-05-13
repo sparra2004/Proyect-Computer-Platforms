@@ -24,4 +24,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   id!: number;
 
+  @IsString()
+  @IsNotEmpty()
+  password!: string;
+
 }

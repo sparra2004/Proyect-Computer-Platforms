@@ -1,31 +1,38 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import { Vehiculo } from "src/vehiculos/entities/vehiculo.entity";
-import { User } from "src/users/entities/user.entity";
-import { Conductor } from "src/conductores/entities/conductore.entity";
+import { User } from "../../users/entities/user.entity";
+import { Conductor } from "../../conductores/entities/conductore.entity";
+import { Vehiculo } from "../../vehiculos/entities/vehiculo.entity";
+
+
 
 
 @Entity()
 export class Viaje {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  inicio: string;
+  inicio!: string;
 
   @Column()
-  final: string;
+  final!: string;
 
   @ManyToOne(() => User, (user) => user.viajes)
   @JoinColumn({ name: "user_id" })
-  user: User;
+  user!: User;
 
   @ManyToOne(() => Conductor, (conductor) => conductor.viajes)
   @JoinColumn({ name: "conductor_id" })
-  conductor: Conductor;
+  conductor!: Conductor;
 
   @ManyToOne(() => Vehiculo)
   @JoinColumn({ name: "vehiculo_placa" })
-  vehiculo: Vehiculo;
+  vehiculo!: Vehiculo;
 
+  @Column({ nullable: true })
+  fecha!: string;
+
+  @Column({ nullable: true })
+  hora!: string;
 }

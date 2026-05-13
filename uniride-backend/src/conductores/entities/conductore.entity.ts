@@ -1,5 +1,7 @@
-import { Viaje } from "src/viajes/entities/viaje.entity";
+
 import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
+import { Viaje } from "../../viajes/entities/viaje.entity";
+
 
 
 @Entity()

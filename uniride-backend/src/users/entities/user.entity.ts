@@ -1,26 +1,27 @@
-import { Viaje } from "src/viajes/entities/viaje.entity";
 import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
-
+import { Viaje } from "../../viajes/entities/viaje.entity";
 
 @Entity()
 export class User {
 
   @PrimaryColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column()
-  age: number;
+  age!: number;
 
   @Column({ unique: true })
-  telefono: string;
+  telefono!: string;
 
   @OneToMany(() => Viaje, (viaje) => viaje.user)
-  viajes: Viaje[];
-
+  viajes!: Viaje[];
+  
+  @Column({ nullable: true })
+  password!: string;
 }

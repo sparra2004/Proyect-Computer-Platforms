@@ -19,8 +19,15 @@ export class CreateViajeDto {
   @IsNotEmpty()
   conductor_id!: number;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  vehiculo_id!: number;
+  vehiculo_id!: string;
 
+  @IsString()
+  @IsNotEmpty()
+  fecha!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  hora!: string;
 }

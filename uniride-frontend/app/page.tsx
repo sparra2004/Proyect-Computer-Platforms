@@ -1,214 +1,144 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { getUsers, createUser, createConductor } from './lib/api';
-import { useUser } from './context/UserContext';
+import Link from 'next/link';
+import Image from 'next/image';
 
-export default function AuthPage() {
-  const router = useRouter();
-  const { setUser } = useUser();
-  const [tab, setTab] = useState<'login' | 'registro'>('login');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [esConductor, setEsConductor] = useState(false);
-
-  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
-  const [regForm, setRegForm] = useState({
-    id: '', name: '', email: '', age: '', telefono: '', licencia: false,
-  });
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const res = await getUsers();
-      const found = res.data.find((u: any) => u.email === loginForm.email);
-      if (!found) { setError('No existe un usuario con ese correo.'); return; }
-      setUser({ ...found, esConductor: false });
-      router.push('/inicio');
-    } catch {
-      setError('Error al conectar con el servidor.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRegistro = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const userPayload = {
-        id: Number(regForm.id),
-        name: regForm.name,
-        email: regForm.email,
-        age: Number(regForm.age),
-        telefono: regForm.telefono,
-      };
-      await createUser(userPayload);
-      if (esConductor) {
-        await createConductor({
-          id: Number(regForm.id),
-          name: regForm.name,
-          telefono: regForm.telefono,
-          licencia: regForm.licencia,
-        });
-      }
-      setUser({ ...userPayload, esConductor });
-      router.push('/inicio');
-    } catch (err: any) {
-      setError(err?.response?.data?.message || 'Error al registrarse.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function LandingPage() {
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #EDE9FE 0%, #F5F3FF 50%, #FAF5FF 100%)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '24px',
-    }}>
-      <div style={{ width: '100%', maxWidth: 480 }}>
+    <div style={{ minHeight: '100vh', background: '#F5F3FF', fontFamily: 'Nunito, sans-serif' }}>
 
-        {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+      {/* Navbar */}
+      <nav style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 48px', height: 64, background: 'white',
+        borderBottom: '1px solid #E5E7EB',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
-            width: 64, height: 64,
-            background: 'linear-gradient(135deg, #6D28D9, #A855F7)',
-            borderRadius: 18, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', fontSize: 28, margin: '0 auto 12px',
+            width: 36, height: 36, background: 'linear-gradient(135deg, #6D28D9, #A855F7)',
+            borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
           }}>🚗</div>
-          <h1 style={{ fontSize: 26, fontWeight: 800 }}>
+          <span style={{ fontSize: 20, fontWeight: 800 }}>
             <span style={{ color: '#111' }}>Uni</span>
             <span style={{ color: '#7C3AED' }}>Ride</span>
-          </h1>
+          </span>
         </div>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <Link href="/login">
+            <button style={{
+              padding: '9px 20px', borderRadius: 10, border: '1.5px solid #E5E7EB',
+              background: 'white', fontFamily: 'Nunito, sans-serif', fontSize: 14,
+              fontWeight: 700, cursor: 'pointer', color: '#111',
+            }}>Iniciar sesión</button>
+          </Link>
+          <Link href="/registro">
+            <button style={{
+              padding: '9px 20px', borderRadius: 10, border: 'none',
+              background: 'linear-gradient(135deg, #6D28D9, #A855F7)',
+              fontFamily: 'Nunito, sans-serif', fontSize: 14,
+              fontWeight: 700, cursor: 'pointer', color: 'white',
+            }}>Registrarme</button>
+          </Link>
+        </div>
+      </nav>
 
-        {/* Card */}
-        <div style={{
-          background: 'white', borderRadius: 20,
-          padding: '32px', boxShadow: '0 4px 24px rgba(124,58,237,0.08)',
-        }}>
-          {/* Tabs */}
+      {/* Hero */}
+      <section style={{
+        maxWidth: 1100, margin: '0 auto', padding: '80px 48px 60px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 48,
+      }}>
+        <div style={{ flex: 1 }}>
           <div style={{
-            display: 'flex', background: '#F3F4F6',
-            borderRadius: 12, padding: 4, marginBottom: 28,
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: 'white', border: '1px solid #E5E7EB',
+            borderRadius: 99, padding: '6px 16px', fontSize: 13,
+            fontWeight: 700, color: '#7C3AED', marginBottom: 24,
           }}>
-            {(['login', 'registro'] as const).map((t) => (
-              <button key={t} onClick={() => { setTab(t); setError(''); }}
-                style={{
-                  flex: 1, padding: '10px', borderRadius: 10, border: 'none',
-                  fontFamily: 'Nunito, sans-serif', fontSize: 14, fontWeight: 700,
-                  cursor: 'pointer', transition: 'all 0.15s',
-                  background: tab === t ? 'white' : 'transparent',
-                  color: tab === t ? '#111' : '#6B7280',
-                }}>
-                {t === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
-              </button>
+            ✦ Solo para universitarios
+          </div>
+          <h1 style={{
+            fontSize: 52, fontWeight: 800, lineHeight: 1.1,
+            marginBottom: 20, color: '#111',
+          }}>
+            Comparte viajes con tu{' '}
+            <span style={{ color: '#7C3AED' }}>comunidad universitaria</span>
+          </h1>
+          <p style={{ fontSize: 17, color: '#6B7280', lineHeight: 1.7, marginBottom: 36, maxWidth: 480 }}>
+            UniRide conecta estudiantes verificados con correo institucional para que moverse al campus sea más barato, seguro y sostenible.
+          </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Link href="/registro">
+              <button style={{
+                padding: '14px 32px', borderRadius: 12, border: 'none',
+                background: 'linear-gradient(135deg, #6D28D9, #A855F7)',
+                fontFamily: 'Nunito, sans-serif', fontSize: 16,
+                fontWeight: 700, cursor: 'pointer', color: 'white',
+              }}>Comenzar gratis →</button>
+            </Link>
+            <Link href="/login">
+              <button style={{
+                padding: '14px 32px', borderRadius: 12,
+                border: '1.5px solid #E5E7EB', background: 'white',
+                fontFamily: 'Nunito, sans-serif', fontSize: 16,
+                fontWeight: 700, cursor: 'pointer', color: '#111',
+              }}>Iniciar sesión</button>
+            </Link>
+          </div>
+          <div style={{ display: 'flex', gap: 24, marginTop: 32 }}>
+            {['Solo correos .edu', '100% estudiantes'].map(t => (
+              <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#6B7280', fontWeight: 600 }}>
+                <span style={{ color: '#7C3AED' }}>✓</span> {t}
+              </div>
             ))}
           </div>
-
-          {/* Login form */}
-          {tab === 'login' && (
-            <form onSubmit={handleLogin}>
-              <div className="form-group" style={{ marginBottom: 16 }}>
-                <label>Correo institucional</label>
-                <input type="email" placeholder="tu@universidad.edu"
-                  value={loginForm.email}
-                  onChange={e => setLoginForm({ ...loginForm, email: e.target.value })}
-                  required />
-              </div>
-              <div className="form-group" style={{ marginBottom: 20 }}>
-                <label>Contraseña</label>
-                <input type="password" placeholder="••••••••"
-                  value={loginForm.password}
-                  onChange={e => setLoginForm({ ...loginForm, password: e.target.value })}
-                  required />
-              </div>
-              {error && <p style={{ color: '#EF4444', fontSize: 13, fontWeight: 600, marginBottom: 14 }}>{error}</p>}
-              <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? 'Entrando...' : 'Entrar'}
-              </button>
-              <div style={{
-                marginTop: 16, padding: '12px 16px',
-                background: '#F5F3FF', borderRadius: 10,
-                fontSize: 13, color: '#6B7280', display: 'flex', gap: 8,
-              }}>
-                <span>🛡️</span>
-                <span>Solo aceptamos correos institucionales terminados en <b>.edu</b> (incluye .edu.mx, .edu.co, etc.).</span>
-              </div>
-            </form>
-          )}
-
-          {/* Registro form */}
-          {tab === 'registro' && (
-            <form onSubmit={handleRegistro}>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label>ID / Cédula</label>
-                  <input type="number" placeholder="1234567890"
-                    value={regForm.id}
-                    onChange={e => setRegForm({ ...regForm, id: e.target.value })}
-                    required />
-                </div>
-                <div className="form-group">
-                  <label>Edad</label>
-                  <input type="number" placeholder="21"
-                    value={regForm.age}
-                    onChange={e => setRegForm({ ...regForm, age: e.target.value })}
-                    required min={16} max={80} />
-                </div>
-                <div className="form-group full">
-                  <label>Nombre completo</label>
-                  <input type="text" placeholder="Santiago Parra Ortiz"
-                    value={regForm.name}
-                    onChange={e => setRegForm({ ...regForm, name: e.target.value })}
-                    required />
-                </div>
-                <div className="form-group full">
-                  <label>Correo institucional</label>
-                  <input type="email" placeholder="tu@universidad.edu.co"
-                    value={regForm.email}
-                    onChange={e => setRegForm({ ...regForm, email: e.target.value })}
-                    required />
-                </div>
-                <div className="form-group full">
-                  <label>Teléfono</label>
-                  <input type="tel" placeholder="+57 300 000 0000"
-                    value={regForm.telefono}
-                    onChange={e => setRegForm({ ...regForm, telefono: e.target.value })}
-                    required />
-                </div>
-              </div>
-
-              <label className="checkbox-row" style={{ marginTop: 16 }}>
-                <input type="checkbox" checked={esConductor}
-                  onChange={e => setEsConductor(e.target.checked)} />
-                🚗 También quiero registrarme como conductor
-              </label>
-
-              {esConductor && (
-                <label className="checkbox-row" style={{ marginTop: 10, background: '#ECFDF5', color: '#059669' }}>
-                  <input type="checkbox" checked={regForm.licencia}
-                    onChange={e => setRegForm({ ...regForm, licencia: e.target.checked })} />
-                  ✅ Tengo licencia de conducción vigente
-                </label>
-              )}
-
-              {error && <p style={{ color: '#EF4444', fontSize: 13, fontWeight: 600, marginTop: 14 }}>{error}</p>}
-
-              <button type="submit" className="btn-primary" style={{ marginTop: 20 }} disabled={loading}>
-                {loading ? 'Registrando...' : 'Crear cuenta →'}
-              </button>
-            </form>
-          )}
         </div>
-      </div>
+
+        {/* Imagen hero */}
+        <div style={{
+          flex: 1, borderRadius: 20, overflow: 'hidden',
+          boxShadow: '0 20px 60px rgba(124,58,237,0.2)', maxWidth: 480,
+        }}>
+          <Image
+            src="/hero-uniride.jpg"
+            alt="UniRide hero"
+            width={480}
+            height={360}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </div>
+      </section>
+
+      {/* Features */}
+      <section style={{
+        maxWidth: 1100, margin: '0 auto', padding: '0 48px 80px',
+        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24,
+      }}>
+        {[
+          { icon: '🚗', title: 'Conductor o pasajero', desc: 'Tú decides cada día. Activa el modo conductor cuando quieras compartir tu vehículo.' },
+          { icon: '📍', title: 'Rutas al campus', desc: 'Encuentra viajes hacia tu universidad con estudiantes de tu propia institución.' },
+          { icon: '🕓', title: 'Historial completo', desc: 'Consulta todos tus viajes pasados, conductores y vehículos en un solo lugar.' },
+        ].map(f => (
+          <div key={f.title} style={{
+            background: 'white', border: '1px solid #E5E7EB',
+            borderRadius: 16, padding: '28px 24px',
+          }}>
+            <div style={{
+              width: 52, height: 52, background: 'linear-gradient(135deg, #6D28D9, #A855F7)',
+              borderRadius: 14, display: 'flex', alignItems: 'center',
+              justifyContent: 'center', fontSize: 24, marginBottom: 16,
+            }}>{f.icon}</div>
+            <h3 style={{ fontSize: 17, fontWeight: 800, marginBottom: 8 }}>{f.title}</h3>
+            <p style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>{f.desc}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* Footer */}
+      <footer style={{
+        borderTop: '1px solid #E5E7EB', padding: '24px 48px',
+        textAlign: 'center', color: '#9CA3AF', fontSize: 13, fontWeight: 600,
+      }}>
+        © 2026 UniRide · Hecho para estudiantes
+      </footer>
     </div>
   );
 }
