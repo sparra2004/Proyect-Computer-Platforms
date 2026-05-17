@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../context/UserContext';
-import { getViajes, createViaje } from '../lib/api';
+import { getViajes } from '../lib/api';
 import Navbar from '../components/Navbar';
 
 export default function PedirViajePage() {
@@ -31,15 +31,12 @@ export default function PedirViajePage() {
     if (!user) return;
     setLoading(true);
     try {
-      await createViaje({
-        inicio: v.inicio,
-        final: v.final,
-        user_id: user.id,
-        conductor_id: v.conductor?.id,
-        vehiculo_id: v.vehiculo?.placa,
-        fecha: v.fecha,
-        hora: v.hora,
-      });
+      const reservados = JSON.parse(localStorage.getItem('viajes_reservados') || '[]');
+      const yaReservado = reservados.find((r: any) => r.id === v.id);
+      if (!yaReservado) {
+        reservados.push(v);
+        localStorage.setItem('viajes_reservados', JSON.stringify(reservados));
+      }
       showToast('¡Viaje reservado exitosamente!');
     } catch {
       showToast('Error al reservar el viaje.');
@@ -126,7 +123,6 @@ export default function PedirViajePage() {
                   </button>
                 </div>
 
-                {/* Datos del conductor */}
                 {conductor && (
                   <div style={{
                     background: '#F5F3FF', borderRadius: 10,

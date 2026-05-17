@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { createUser, createConductor } from '../lib/api';
+import { createUser } from '../lib/api';
 import { useUser } from '../context/UserContext';
 
 export default function RegistroPage() {
@@ -10,10 +10,9 @@ export default function RegistroPage() {
   const { setUser } = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [esConductor, setEsConductor] = useState(false);
 
   const [form, setForm] = useState({
-    id: '', name: '', email: '', age: '', telefono: '', password: '', licencia: false,
+    id: '', name: '', email: '', age: '', telefono: '', password: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,15 +29,7 @@ export default function RegistroPage() {
         password: form.password,
       };
       await createUser(userPayload);
-      if (esConductor) {
-        await createConductor({
-          id: Number(form.id),
-          name: form.name,
-          telefono: form.telefono,
-          licencia: form.licencia,
-        });
-      }
-      setUser({ ...userPayload, esConductor });
+      setUser({ ...userPayload, esConductor: false });
       router.push('/inicio');
     } catch (err: any) {
       setError(err?.response?.data?.message || 'Error al registrarse.');
@@ -103,13 +94,14 @@ export default function RegistroPage() {
             </Link>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off">
             <div className="form-grid">
               <div className="form-group">
                 <label>ID / Cédula</label>
                 <input type="number" placeholder="1234567890"
                   value={form.id}
                   onChange={e => setForm({ ...form, id: e.target.value })}
+                  autoComplete="off"
                   required />
               </div>
               <div className="form-group">
@@ -117,13 +109,15 @@ export default function RegistroPage() {
                 <input type="number" placeholder="21"
                   value={form.age}
                   onChange={e => setForm({ ...form, age: e.target.value })}
+                  autoComplete="off"
                   required min={16} max={80} />
               </div>
               <div className="form-group full">
                 <label>Nombre completo</label>
-                <input type="text" placeholder="Santiago Parra Ortiz"
+                <input type="text" placeholder="Pepito Perez Maradona"
                   value={form.name}
                   onChange={e => setForm({ ...form, name: e.target.value })}
+                  autoComplete="off"
                   required />
               </div>
               <div className="form-group full">
@@ -131,6 +125,7 @@ export default function RegistroPage() {
                 <input type="email" placeholder="tu@universidad.edu.co"
                   value={form.email}
                   onChange={e => setForm({ ...form, email: e.target.value })}
+                  autoComplete="off"
                   required />
               </div>
               <div className="form-group full">
@@ -138,6 +133,7 @@ export default function RegistroPage() {
                 <input type="tel" placeholder="+57 300 000 0000"
                   value={form.telefono}
                   onChange={e => setForm({ ...form, telefono: e.target.value })}
+                  autoComplete="off"
                   required />
               </div>
               <div className="form-group full">
@@ -145,23 +141,10 @@ export default function RegistroPage() {
                 <input type="password" placeholder="Mínimo 6 caracteres"
                   value={form.password}
                   onChange={e => setForm({ ...form, password: e.target.value })}
+                  autoComplete="new-password"
                   required minLength={6} />
               </div>
             </div>
-
-            <label className="checkbox-row" style={{ marginTop: 16 }}>
-              <input type="checkbox" checked={esConductor}
-                onChange={e => setEsConductor(e.target.checked)} />
-              🚗 También quiero registrarme como conductor
-            </label>
-
-            {esConductor && (
-              <label className="checkbox-row" style={{ marginTop: 10, background: '#ECFDF5', color: '#059669' }}>
-                <input type="checkbox" checked={form.licencia}
-                  onChange={e => setForm({ ...form, licencia: e.target.checked })} />
-                ✅ Tengo licencia de conducción vigente
-              </label>
-            )}
 
             {error && (
               <p style={{ color: '#EF4444', fontSize: 13, fontWeight: 600, marginTop: 14 }}>

@@ -7,6 +7,7 @@ const links = [
   { href: '/inicio', label: 'Inicio', icon: '🏠' },
   { href: '/pedir-viaje', label: 'Pedir viaje', icon: '🔍' },
   { href: '/ofrecer-viaje', label: 'Ofrecer viaje', icon: '➕' },
+  { href: '/mis-viajes', label: 'Mis viajes', icon: '🗂️' },
   { href: '/historial', label: 'Historial', icon: '🕓' },
   { href: '/perfil', label: 'Perfil', icon: '👤' },
 ];
