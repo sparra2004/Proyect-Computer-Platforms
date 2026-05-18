@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://proyect-computer-platforms-production.up.railway.app',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://proyect-computer-platforms-production.up.railway.app',
 });
 
 export default api;
